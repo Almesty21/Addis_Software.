@@ -1,0 +1,9 @@
+
+.equal-height-col {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .equal-height-col > * {
+    flex: 1;
+  }
