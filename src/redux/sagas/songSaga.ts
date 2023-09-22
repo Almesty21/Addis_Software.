@@ -1,16 +1,8 @@
 import { call, put, takeLatest, SagaReturnType, takeEvery } from 'redux-saga/effects';
 import { Song, createSong, fetchSongs, updateSong, deleteSongService } from '../../services/songService'; // Import your service
-import { setSongs, setLoading, setError, createSongSuccess, updateSongSuccess, updateSongFailure, deleteSong, deleteSongAction } from '../slices/songSlice';
+import { setSongs, setLoading, setError, createSongSuccess, updateSongSuccess, updateSongFailure, deleteSongAction } from '../slices/songSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-
-
-export interface DeleteSongAction {
-    type: string;
-    payload: {
-        id: string;
-    };
-}
 
 function* getSongsSaga() {
     try {
@@ -48,13 +40,15 @@ function* updateSongSaga(action: PayloadAction<{ id: string; updatedSongData: Pa
     }
 }
 
-function* deleteSongSaga(action: ReturnType<typeof deleteSongAction>) {
+function* deleteSongSaga(action: PayloadAction<string>) {
     try {
       const songIdToDelete = action.payload;
+  
+      // Call your deleteSongService function to delete the song from the server
       yield call(deleteSongService, songIdToDelete);
   
-      // Dispatch a success action to update the UI
-      yield put(deleteSong(songIdToDelete));
+      // Dispatch a success action to update the UI by removing the song from the Redux store
+      yield put(deleteSongAction(songIdToDelete));
     } catch (error) {
       // Handle errors if needed
       console.error('Error deleting song:', error);
@@ -79,5 +73,5 @@ export function* watchUpdateSong() {
 
 // Watch for deleteSong actions and run the deleteSongSaa
 export function* watchDeleteSong() {
-    yield takeEvery(deleteSongAction.type, deleteSongSaga);
+    yield takeEvery('song/deleteSong', deleteSongSaga);
 }

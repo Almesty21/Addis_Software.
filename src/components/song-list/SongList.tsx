@@ -42,10 +42,16 @@ const SongList: React.FC = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await deleteSongService(songToDelete);
+      // await deleteSongService(songToDelete);
+      // setShowDeleteModal(false);
+
+      // window.location.reload();
+	  await deleteSongService(songToDelete);
+
+      dispatch(deleteSongAction(songToDelete));
       setShowDeleteModal(false);
 
-      window.location.reload();
+      navigate('/songs');
 
     } catch (error) {
       console.error('Error deleting song:', error);

@@ -15,8 +15,6 @@ const initialState: SongState = {
   selectedGenre: '',
 };
 
-export const deleteSongAction = createAction<string>('song/deleteSong');
-
 // Create an action using createAction
 export const updateSongRequest  = createAction<{ id: string; updatedSongData: Partial<Song> }>('song/updateSong');
 
@@ -60,9 +58,9 @@ const songSlice = createSlice({
     },
 
     // Define a reducer to remove a song by its ID
-    deleteSong(state, action) {
-      const songIdToDelete = action.payload;
-      state.songs = state.songs.filter((song) => song._id !== songIdToDelete);
+    deleteSongAction: (state, action) => {
+      // Remove the deleted song from the state
+      state.songs = state.songs.filter((song) => song._id !== action.payload);
     },
     // Add a new reducer to set the selected genre
     setSelectedGenre: (state, action) => {
@@ -72,5 +70,5 @@ const songSlice = createSlice({
   }
 
 });
-export const { setSongs, setLoading, setError, createSongSuccess, updateSongSuccess, updateSongFailure, deleteSong, setSelectedGenre  } = songSlice.actions;
+export const { setSongs, setLoading, setError, createSongSuccess, updateSongSuccess, updateSongFailure, deleteSongAction, setSelectedGenre  } = songSlice.actions;
 export default songSlice.reducer;
